@@ -34,7 +34,7 @@ function replaceAndExportAsPDF() {
     // Check if there are any "_" left to replace
     if (tempBody.findText("_") === null) {
       // If no "_" left, export the document as PDF
-      exportAsPDF(tempDoc, tempFile);
+      exportAsPDF(tempDoc, replaceWord);
     } else {
       // If there are still "_" to replace, show an error message
       ui.alert('Error: Not all instances of "_" were replaced.');
@@ -44,6 +44,7 @@ function replaceAndExportAsPDF() {
     tempFile.setTrashed(true);
   }
 }
+
 function replaceTextInBody(body, searchText, replaceText) {
   var foundElement = body.findText(searchText);
   while (foundElement != null) {
@@ -57,11 +58,12 @@ function replaceTextInBody(body, searchText, replaceText) {
     foundElement = body.findText(searchText, foundElement);
   }
 }
-function exportAsPDF(doc) {
+
+function exportAsPDF(doc, replaceWord) {
   var docId = doc.getId();
-  var docName = doc.getName();
   var pdfBlob = DriveApp.getFileById(docId).getAs("application/pdf");
-  var pdfFile = DriveApp.createFile(pdfBlob).setName(docName + ".pdf");
+  var formattedName = 'NBCOVERLETTER_' + replaceWord + '.pdf';
+  var pdfFile = DriveApp.createFile(pdfBlob).setName(formattedName);
 
   // Show a message with the link to the PDF file
   var ui = DocumentApp.getUi();
